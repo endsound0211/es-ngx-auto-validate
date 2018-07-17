@@ -9,10 +9,10 @@
 ## Table of contents
 * [Setup](#setup)
 * [Usage](#usage)
-** [Reactive Form](#reactive-form)
-** [Template Driven form](#template-driven-form)
-* [customize error message](#customize-error-message)
-* [customize strategy](#customize-strategy)
+  * [Reactive Form](#reactive-form)
+  * [Template Driven form](#template-driven-form)
+* [Customize Error Message](#customize-error-message)
+* [Customize Strategy](#customize-strategy)
 
 ## Setup
 Need to install the npm module
@@ -78,7 +78,7 @@ class ReactiveFormDemoComponent{
 }
 ````
 
-### Template Driven 
+### Template Driven Form
 You can use [esAutoValidate] with ngModel
 ````angular2html
 <form>
@@ -114,7 +114,7 @@ class TemplateDrivenFormDemoComponent{
   
   submit(){
       if(this.ngForm.valid){
-  
+        //submit
       }else {
         this.autoValidates.forEach((autoValidate) => autoValidate.checkError());
       }

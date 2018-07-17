@@ -21,7 +21,7 @@ import {CustomizeRenderDivNodeStrategy} from './customize-render-div-node-strate
   declarations: [ReactiveFormDemoComponent],
   providers: [
     // {provide: ERROR_MESSAGE_TOKEN, useValue: CustomizeErrorMessageMapEnUs},
-    {provide: RENDER_DIV_NODE_STRATEGY, useClass: CustomizeRenderDivNodeStrategy},
+    // {provide: RENDER_DIV_NODE_STRATEGY, useClass: CustomizeRenderDivNodeStrategy},
     {provide: ERROR_MESSAGE_TOKEN, useValue: DefaultErrorMessageMapEnUs}
   ]
 })
