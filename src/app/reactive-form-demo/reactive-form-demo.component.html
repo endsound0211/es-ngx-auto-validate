@@ -1,0 +1,39 @@
+<form [formGroup]="formGroup" novalidate>
+  <div>
+    <div>
+      <label>Name</label>
+    </div>
+    <div>
+      <input type="text" formControlName="name" name="name">
+    </div>
+    <div esAutoValidate [control]="formGroup.get('name')"></div>
+  </div>
+  <div>
+    <div>
+      <label>Age</label>
+    </div>
+    <div>
+      <input type="number" formControlName="age" name="age" esAutoValidate>
+    </div>
+  </div>
+  <div>
+    <div>
+      <label>Email</label>
+    </div>
+    <div>
+      <input type="email" formControlName="email" name="email" esAutoValidate>
+    </div>
+  </div>
+  <div>
+    <div>
+      <label>Note</label>
+    </div>
+    <div>
+      <input type="text" formControlName="note" name="note" esAutoValidate>
+    </div>
+  </div>
+  <div>
+    <button type="button" (click)="submit()">Submit</button>
+  </div>
+
+</form>

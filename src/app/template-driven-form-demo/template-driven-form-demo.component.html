@@ -1,0 +1,43 @@
+<form #tdForm="ngForm">
+  <div>
+    <div>
+      <label>Name</label>
+    </div>
+    <div>
+      <input type="text" name="name" [(ngModel)]="data.name"
+             required #name="ngModel">
+    </div>
+    <div esAutoValidate [control]="name.control"></div>
+  </div>
+  <div>
+    <div>
+      <label>Age</label>
+    </div>
+    <div>
+      <input type="number" [(ngModel)]="data.age" name="age"
+             required max="110" min="1" esAutoValidate>
+    </div>
+  </div>
+  <div>
+    <div>
+      <label>Email</label>
+    </div>
+    <div>
+      <input type="email" [(ngModel)]="data.email" name="email"
+             required esAutoValidate>
+    </div>
+  </div>
+  <div>
+    <div>
+      <label>Note</label>
+    </div>
+    <div>
+      <input type="text" [(ngModel)]="data.note" name="note"
+             required maxlength="2" minlength="2" esAutoValidate>
+    </div>
+  </div>
+  <div>
+    <button type="button" (click)="submit()">Submit</button>
+  </div>
+
+</form>

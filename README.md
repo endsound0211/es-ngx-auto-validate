@@ -1,27 +1,168 @@
-# EsNgxAutoValidate
+# ES Angular Auto Validate
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.3.
+## Feature
+* auto validate form control
+* customize error message
+* customize strategy include rendering and inserting
+* i18n
 
-## Development server
+## Table of contents
+* [Setup](#setup)
+* [Usage](#usage)
+** [Reactive Form](#reactive-form)
+** [Template Driven form](#template-driven-form)
+* [customize error message](#customize-error-message)
+* [customize strategy](#customize-strategy)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Setup
+Need to install the npm module
+````
+npm install es-ngx-auto-validate
+````
 
-## Code scaffolding
+## Usage
+Import 'AutoValidateModule' to module and provide 'ERROR_MESSAGE_TOKEN' with 'DefaultErrorMessageMapXXXX' (XXXX is locale name) or customize map
+````typescript
+@NgModule{
+    imports: [
+      AutoValidateModule
+    ],
+    providers: [
+        {provide: ERROR_MESSAGE_TOKEN, useValue: DefaultErrorMessageMapEnUs}
+    ]
+}
+export class AppModule{}
+````
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Reactive Form
+You can use [esAutoValidate] with formControlName, formGroupName or formArrayName
+````angular2html
+<form [formGroup]="formGroup" novalidate>
+  <div>
+    <div>
+      <label>Name</label>
+    </div>
+    <div>
+      <input type="text" formControlName="name" name="name" esAutoValidate>
+    </div>
+  </div>
+</form>
+````
+or give it 'control' directly
+````angular2html
+<form [formGroup]="formGroup" novalidate>
+  <div>
+    <div>
+      <label>Name</label>
+    </div>
+    <div>
+      <input type="text" formControlName="name" name="name">
+    </div>
+    <div esAutoValidate [control]="formGroup.get('name')"></div>
+  </div>
+</form>
+````
+check valid before submit
+````typescript
+class ReactiveFormDemoComponent{
+  formGroup: FromGroup;
+  @ViewChildren(AutoValidateDirective) autoValidates: QueryList<AutoValidateDirective>;
+  
+  submit(){
+    if(this.formGroup.valid){
+      //submit
+    }else {
+      this.autoValidates.forEach((autoValidate) => autoValidate.checkError());
+    }
+  }
+}
+````
 
-## Build
+### Template Driven 
+You can use [esAutoValidate] with ngModel
+````angular2html
+<form>
+  <div>
+    <div>
+      <label>Name</label>
+    </div>
+    <div>
+      <input type="text" [(ngModel)]="data.name" name="name" required esAutoValidate>
+    </div>
+  </div>
+</form>
+````
+or give it 'control' directly
+````angular2html
+<form>
+  <div>
+    <div>
+      <label>Name</label>
+    </div>
+    <div>
+      <input type="text" [(ngModel)]="data.name" name="name" required #name="ngModel">
+    </div>
+    <div esAutoValidate [control]="name.control"></div>
+  </div>
+</form>
+````
+check valid before submit
+````typescript
+class TemplateDrivenFormDemoComponent{
+  @ViewChildren(AutoValidateDirective) autoValidates: QueryList<AutoValidateDirective>;
+  @ViewChild(NgForm) ngForm: NgForm;
+  
+  submit(){
+      if(this.ngForm.valid){
+  
+      }else {
+        this.autoValidates.forEach((autoValidate) => autoValidate.checkError());
+      }
+    }
+}
+````
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Customize Error Message
 
-## Running unit tests
+Define ErrorMessageMap variable:
+````typescript
+export const CustomizeErrorMessageMapEnUs: ErrorMessageMap = {
+  required: 'Customize Required',
+  max: (err) => {return `Customize Max: ${err.max}`;},
+  min: (err) => {return `Customize Min: ${err.min}`;},
+  maxlength: (err) => {return `Customize Max Length: ${err.actualLength}/${err.requiredLength}`},
+  minlength: (err) => {return `Customize Min Length: ${err.actualLength}/${err.requiredLength}`},
+  email: 'Customize Invalid Email Format'
+};
+````
+And provide it:
+````typescript
+@NgModule{
+    imports: [
+      AutoValidateModule
+    ],
+    providers: [
+        {provide: ERROR_MESSAGE_TOKEN, useValue: CustomizeErrorMessageMapEnUs}
+    ]
+}
+export class AppModule{}
+````
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+There are some default locale error message as follow:
+    DefaultErrorMessageMapEnUs
+    DefaultErrorMessageMapZhTw
+    
+## Customize Strategy
 
-## Running end-to-end tests
+Define class and implement RenderDivNodeStrategy
+````typescript
+export class CustomizeRenderDivNodeStrategy implements RenderDivNodeStrategy{
+  renderDiv(renderer: Renderer2, divNode: any, target: ElementRef){
+    renderer.setStyle(divNode, 'color', '#4244a9');
+  };
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  insertDiv(renderer: Renderer2, divNode: any, target: ElementRef) {
+    renderer.appendChild(target.nativeElement.parentNode, divNode);
+  };
+}
+````
