@@ -63,7 +63,7 @@ export class AutoValidateDirective implements OnInit{
     this.divNode = this.renderer.createElement('div');
     this.renderer.setAttribute(this.divNode, 'id', 'validate-error');
     this.renderer.addClass(this.divNode, 'validate-error');
-    this.renderDivNodeStrategy.renderDiv(this.renderer, this.divNode, this.for);
+    this.renderDivNodeStrategy.renderDiv(this.renderer, this.divNode, this.elementRef);
   }
 
   checkError(): void{
@@ -86,7 +86,7 @@ export class AutoValidateDirective implements OnInit{
 
       this.renderer.setProperty(this.divNode, 'innerHTML', errorMessage);
       if(!this.isRender){
-        this.renderDivNodeStrategy.insertDiv(this.renderer, this.divNode, this.for);
+        this.renderDivNodeStrategy.insertDiv(this.renderer, this.divNode, this.elementRef);
         this.isRender = true;
       }
     }else{
