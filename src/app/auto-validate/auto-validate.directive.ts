@@ -14,13 +14,13 @@ import {isEmpty} from 'rxjs/operators';
 export class AutoValidateDirective implements OnInit{
   static defaultRenderDivNodeStrategy: RenderDivNodeStrategy = new DefaultRenderDivNodeStrategy();
 
-  @Input()
+  @Input('auto-control')
   control: AbstractControl;
   divNode: any;
   isRender: boolean = false;
   @Input()
   separator: string = ',';
-  @Input()
+  @Input('auto-for')
   for: any;
 
   valueChangeSubscription: Subscription;

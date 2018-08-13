@@ -48,7 +48,7 @@ You can use [esAutoValidate] with formControlName, formGroupName or formArrayNam
   </div>
 </form>
 ````
-or give it 'control' and for directly
+or give it 'auto-control' and 'auto-for' directly
 ````angular2html
 <form [formGroup]="formGroup" novalidate>
   <div>
@@ -58,7 +58,7 @@ or give it 'control' and for directly
     <div>
           <input type="text" formControlName="name" name="name" #name>
     </div>
-    <div esAutoValidate [control]="formGroup.get('name')" [for]="name"></div>
+    <div esAutoValidate [auto-control]="formGroup.get('name')" [auto-for]="name"></div>
   </div>
 </form>
 ````
@@ -92,7 +92,7 @@ You can use [esAutoValidate] with ngModel
   </div>
 </form>
 ````
-or give it 'control' and 'for' directly
+or give it 'auto-control' and 'auto-for' directly
 ````angular2html
 <form>
   <div>
@@ -103,7 +103,7 @@ or give it 'control' and 'for' directly
       <input type="text" name="name" [(ngModel)]="data.name"
              required #name="ngModel" #nameRef>
     </div>
-    <div esAutoValidate [control]="name.control" [for]="nameRef"></div>
+    <div esAutoValidate [auto-control]="name.control" [auto-for]="nameRef"></div>
   </div>
 </form>
 ````

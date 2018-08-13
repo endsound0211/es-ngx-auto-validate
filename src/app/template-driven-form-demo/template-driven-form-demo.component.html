@@ -7,7 +7,7 @@
       <input type="text" name="name" [(ngModel)]="data.name"
              required #name="ngModel" #nameRef>
     </div>
-    <div esAutoValidate [control]="name.control" [for]="nameRef"></div>
+    <div esAutoValidate [auto-control]="name.control" [auto-for]="nameRef"></div>
   </div>
   <div>
     <div>

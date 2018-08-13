@@ -6,7 +6,7 @@
     <div>
       <input type="text" formControlName="name" name="name" #name>
     </div>
-    <div esAutoValidate [control]="formGroup.get('name')" [for]="name"></div>
+    <div esAutoValidate [auto-control]="formGroup.get('name')" [auto-for]="name"></div>
   </div>
   <div>
     <div>
