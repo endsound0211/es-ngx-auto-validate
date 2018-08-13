@@ -5,9 +5,9 @@
     </div>
     <div>
       <input type="text" name="name" [(ngModel)]="data.name"
-             required #name="ngModel">
+             required #name="ngModel" #nameRef>
     </div>
-    <div esAutoValidate [control]="name.control"></div>
+    <div esAutoValidate [control]="name.control" [for]="nameRef"></div>
   </div>
   <div>
     <div>

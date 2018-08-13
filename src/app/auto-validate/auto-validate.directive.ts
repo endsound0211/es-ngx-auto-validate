@@ -20,6 +20,8 @@ export class AutoValidateDirective implements OnInit{
   isRender: boolean = false;
   @Input()
   separator: string = ',';
+  @Input()
+  for: any;
 
   valueChangeSubscription: Subscription;
   statusChangeSubscription: Subscription;
@@ -50,10 +52,18 @@ export class AutoValidateDirective implements OnInit{
     if(isNullOrUndefined(this.renderDivNodeStrategy))
       this.renderDivNodeStrategy = AutoValidateDirective.defaultRenderDivNodeStrategy;
 
+
+    // bind event
+    if(this.for) this.for = new ElementRef(this.for);
+    else this.for = this.elementRef;
+
+    this.renderer.listen(this.for.nativeElement, 'focus', this.onFocus);
+    this.renderer.listen(this.for.nativeElement, 'blur', this.onBlur);
+
     this.divNode = this.renderer.createElement('div');
     this.renderer.setAttribute(this.divNode, 'id', 'validate-error');
     this.renderer.addClass(this.divNode, 'validate-error');
-    this.renderDivNodeStrategy.renderDiv(this.renderer, this.divNode, this.elementRef);
+    this.renderDivNodeStrategy.renderDiv(this.renderer, this.divNode, this.for);
   }
 
   checkError(): void{
@@ -76,26 +86,24 @@ export class AutoValidateDirective implements OnInit{
 
       this.renderer.setProperty(this.divNode, 'innerHTML', errorMessage);
       if(!this.isRender){
-        this.renderDivNodeStrategy.insertDiv(this.renderer, this.divNode, this.elementRef);
+        this.renderDivNodeStrategy.insertDiv(this.renderer, this.divNode, this.for);
         this.isRender = true;
       }
     }else{
       if(this.isRender){
-        this.renderer.removeChild(this.elementRef.nativeElement.parentNode, this.divNode);
+        this.renderer.removeChild(this.for.nativeElement.parentNode, this.divNode);
         this.isRender = false;
       }
     }
   }
 
-  @HostListener('focus', ['$event'])
-  onFocus($event){
+  onFocus = ($event) => {
     this.checkError();
     this.valueChangeSubscription = this.control.valueChanges.subscribe(() => this.checkError());
     this.statusChangeSubscription = this.control.statusChanges.subscribe(() => this.checkError());
   }
 
-  @HostListener('blur', ['$event'])
-  onBlur($event){
+  onBlur = ($event) => {
     if(this.valueChangeSubscription) this.valueChangeSubscription.unsubscribe();
     if(this.statusChangeSubscription) this.statusChangeSubscription.unsubscribe();
     this.checkError();

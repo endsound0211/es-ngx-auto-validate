@@ -4,9 +4,9 @@
       <label>Name</label>
     </div>
     <div>
-      <input type="text" formControlName="name" name="name">
+      <input type="text" formControlName="name" name="name" #name>
     </div>
-    <div esAutoValidate [control]="formGroup.get('name')"></div>
+    <div esAutoValidate [control]="formGroup.get('name')" [for]="name"></div>
   </div>
   <div>
     <div>
