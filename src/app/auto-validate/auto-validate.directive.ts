@@ -91,7 +91,7 @@ export class AutoValidateDirective implements OnInit{
       }
     }else{
       if(this.isRender){
-        this.renderer.removeChild(this.for.nativeElement.parentNode, this.divNode);
+        this.renderer.removeChild(this.elementRef.nativeElement.parentNode, this.divNode);
         this.isRender = false;
       }
     }
