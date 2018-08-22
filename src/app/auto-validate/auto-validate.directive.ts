@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Host, HostListener, Inject, Input, OnInit, Optional, Renderer2} from '@angular/core';
+import {Directive, ElementRef, Host, HostListener, Inject, Input, OnDestroy, OnInit, Optional, Renderer2} from '@angular/core';
 import {AbstractControl, FormArrayName, FormControlName, FormGroupName, NgModel} from '@angular/forms';
 import {ERROR_MESSAGE_TOKEN, ErrorMessageMap} from './error-message-map-token';
 import {isNull, isNullOrUndefined} from 'util';
@@ -11,7 +11,7 @@ import {isEmpty} from 'rxjs/operators';
 @Directive({
   selector: '[NgModel][esAutoValidate],[formArrayName][esAutoValidate],[formControlName][esAutoValidate],[esAutoValidate]'
 })
-export class AutoValidateDirective implements OnInit{
+export class AutoValidateDirective implements OnInit, OnDestroy{
   static defaultRenderDivNodeStrategy: RenderDivNodeStrategy = new DefaultRenderDivNodeStrategy();
 
   @Input('auto-control')
@@ -59,6 +59,7 @@ export class AutoValidateDirective implements OnInit{
 
     this.renderer.listen(this.for.nativeElement, 'focus', this.onFocus);
     this.renderer.listen(this.for.nativeElement, 'blur', this.onBlur);
+    this.statusChangeSubscription = this.control.statusChanges.subscribe(() => this.checkError());
 
     this.divNode = this.renderer.createElement('div');
     this.renderer.setAttribute(this.divNode, 'id', 'validate-error');
@@ -66,10 +67,15 @@ export class AutoValidateDirective implements OnInit{
     this.renderDivNodeStrategy.renderDiv(this.renderer, this.divNode, this.elementRef);
   }
 
+  ngOnDestroy(): void {
+    if(this.statusChangeSubscription) this.statusChangeSubscription.unsubscribe();
+    if(this.valueChangeSubscription) this.valueChangeSubscription.unsubscribe();
+  }
+
   checkError(): void{
     this.control.markAsTouched();
 
-    if(this.control.invalid){
+    if(this.control.invalid && this.control.touched){
       let errorMessage = Object.keys(this.control.errors).map((key: string, index: number, array: string[]) => {
         if(isNullOrUndefined(this.errorMessageMap[key])){
           throw Error(`${key} isn't defined in error message map`);
@@ -97,15 +103,18 @@ export class AutoValidateDirective implements OnInit{
     }
   }
 
+
+
   onFocus = ($event) => {
     this.checkError();
     this.valueChangeSubscription = this.control.valueChanges.subscribe(() => this.checkError());
-    this.statusChangeSubscription = this.control.statusChanges.subscribe(() => this.checkError());
+    // this.statusChangeSubscription = this.control.statusChanges.subscribe(() => this.checkError());
   }
 
   onBlur = ($event) => {
     if(this.valueChangeSubscription) this.valueChangeSubscription.unsubscribe();
-    if(this.statusChangeSubscription) this.statusChangeSubscription.unsubscribe();
+    // if(this.statusChangeSubscription) this.statusChangeSubscription.unsubscribe();
     this.checkError();
   }
+
 }
